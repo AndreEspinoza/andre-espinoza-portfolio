@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Andre Espinoza • CS-499 ePortfolio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand">CS-499 ePortfolio</div>
+    <div class="links">
+      <a href="#self">Self-Assessment</a>
+      <a href="#artifacts">Artifacts</a>
+      <a href="#code-review">Code Review</a>
+      <a href="#screenshots">Screenshots</a>
+      <a href="#downloads">Downloads</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- PROFESSIONAL SELF-ASSESSMENT -->
+    <section id="self">
+      <h1>Professional Self-Assessment</h1>
+      <p>
+        My name is <strong>Andre Espinoza</strong>. I have been working toward my Computer Science
+        degree for about six years total, starting with my associate&apos;s and then finishing this
+        bachelor&apos;s at SNHU. It has not been a straight line. PTSD and knee injuries from my
+        time in the military slowed me down and hit my performance more than once, but I stayed with
+        it. I have been at SNHU for around two years, and this capstone is the last class before I
+        graduate, so this ePortfolio is basically my Gear 5 Luffy moment from my favorite show One Piece
+        where everything I learned finally comes together in one place.
+      </p>
+      <p>
+        The most important things I have taken from this program are learning how to build full stack
+        applications with modern tools, how to think algorithmically instead of just hacking things
+        together, and how to approach every project with a security mindset. The Travlr Getaways
+        project ended up being the main artifact where I pulled all of that together. I refactored it
+        into a cleaner, more secure full stack app with JSON Web Token authentication, full role-based
+        access control, a simple recommendation algorithm for trips, and a real booking flow backed
+        by MongoDB.
+      </p>
+      <p>
+        This ePortfolio is here to show that I can design, build, and explain a complete system from
+        frontend to backend. It highlights how I think about structure, data, security, and real
+        users, not just grades. The code review, enhancement narratives, and database work all tie
+        back to the main CS program outcomes by showing that I can communicate clearly, design
+        solutions with trade-offs in mind, and deliver software that feels ready for real use, not
+        just a class assignment.
+      </p>
+      <p class="muted">
+        A full version of this self-assessment is available as a downloadable document in the
+        Downloads section below.
+      </p>
+    </section>
+
+    <!-- ARTIFACTS OVERVIEW -->
+    <section id="artifacts">
+      <h2>Artifacts and Enhancements</h2>
+      <p>
+        For this capstone I focused on one main artifact, the <strong>Travlr Getaways</strong> web
+        application from CS 465. It is a MEAN stack project that started as a basic travel booking
+        site and then became the core place where I applied three different enhancement paths:
+        software engineering and design, algorithms and data structures, and databases.
+      </p>
+
+      <!-- Software Engineering & Design -->
+      <article class="card">
+        <h3>Software Engineering and Design</h3>
+        <p>
+          Originally, the backend exposed public CRUD operations on trips with minimal validation.
+          I implemented JSON Web Token authentication and role-based access control so only admins
+          can modify trip data.
+        </p>
+        <p>
+          On the server, <code>requireAuth</code> verifies the JWT and
+          <code>requireRole('admin')</code> protects POST, PUT, and DELETE routes for trips. Missing
+          or invalid tokens return a 401 response, while valid tokens with insufficient privileges
+          return a 403 forbidden response.
+        </p>
+        <p>
+          On the Angular client, an HTTP interceptor automatically attaches the Bearer token to API
+          requests. An AuthGuard enforces role-based routing, and the UI hides admin-only actions
+          unless the authenticated user has the admin role. This separation of concerns mirrors
+          real-world production patterns and keeps the codebase secure and maintainable.
+        </p>
+      </article>
+
+      <!-- Algorithms & Data Structures -->
+      <article class="card">
+        <h3>Algorithms and Data Structures</h3>
+        <p>
+          In the original version, trips were returned in an unranked list. I added a simple
+          recommendation algorithm that scores trips based on user preferences such as budget,
+          continent, category, and desired trip length.
+        </p>
+        <p>
+          Each trip is assigned a score, and the list is sorted using an
+          <code>O(n log n)</code> sort. Trips that best match the user’s preferences are displayed
+          first. This approach balances performance, clarity, and explainability without
+          overengineering the solution.
+        </p>
+        <p>
+          This enhancement demonstrates algorithmic thinking, trade-off analysis, and the ability
+          to design efficient solutions appropriate to the scale of the application.
+        </p>
+      </article>
+
+      <!-- Databases -->
+      <article class="card">
+        <h3>Databases</h3>
+        <p>
+          The database enhancement focused on adding a booking system with capacity enforcement.
+          Trips now include a capacity field, and bookings link users to specific trips.
+        </p>
+        <p>
+          The booking flow uses a single atomic
+          <code>findOneAndUpdate</code> operation that checks available capacity and decrements it in
+          one step. Successful bookings return a 201 response with updated capacity, while
+          overbooking attempts return a 409 conflict without modifying data.
+        </p>
+        <p>
+          This design protects data integrity, prevents race conditions, and demonstrates proper
+          use of database constraints in concurrent environments.
+        </p>
+      </article>
+    </section>
+
+    <!-- CODE REVIEW VIDEO -->
+    <section id="code-review">
+      <h2>Informal Code Review</h2>
+      <p>
+        This video walks through the original Travlr Getaways codebase, highlights design and
+        security issues, and explains how the final enhancements improved the system across all
+        three focus areas.
+      </p>
+      <div class="card">
+        <iframe
+          width="100%"
+          height="360"
+          src="https://www.youtube.com/embed/MEt1PKkTS8w"
+          title="CS-499 Code Review"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </section>
+
+    <!-- SCREENSHOTS -->
+    <section id="screenshots">
+      <h2>API and Application Screenshots</h2>
+      <p class="muted">
+        These screenshots show the complete authentication and booking flow, including role-based
+        access control and capacity enforcement.
+      </p>
+
+      <ol>
+        <li>Login returns a JWT token (200).</li>
+        <li>Trip creation blocked for non-admin user (403).</li>
+        <li>Trip created with admin token (201).</li>
+        <li>List trips (200).</li>
+        <li>Booking succeeds and capacity decreases (201).</li>
+        <li>Overbooking attempt blocked (409).</li>
+        <li>View my bookings (200).</li>
+        <li>Admin view all bookings (200).</li>
+        <li>Trip detail shows updated capacity (200).</li>
+      </ol>
+
+      <div class="grid">
+        <img class="shot" src="images/Screenshot%20(1046).png" alt="Login returns JWT token" />
+        <img class="shot" src="images/Screenshot%20(1047).png" alt="Forbidden 403 response" />
+        <img class="shot" src="images/Screenshot%20(1045).png" alt="Trip created 201" />
+        <img class="shot" src="images/Screenshot%20(1048).png" alt="Trips list 200" />
+        <img class="shot" src="images/Screenshot%20(1049).png" alt="Booking success 201" />
+        <img class="shot" src="images/Screenshot%20(1050).png" alt="Overbooking 409" />
+        <img class="shot" src="images/Screenshot%20(1051).png" alt="My bookings 200" />
+        <img class="shot" src="images/Screenshot%20(1054).png" alt="All bookings admin 200" />
+        <img class="shot" src="images/Screenshot%20(1055).png" alt="Trip capacity updated 200" />
+      </div>
+    </section>
+
+    <!-- DOWNLOADS -->
+    <section id="downloads">
+      <h2>Downloads and Supporting Documents</h2>
+      <p>
+        The following documents support the CS 499 capstone requirements.
+      </p>
+      <ul>
+        <li><a href="docs/CS499_Self_Assessment.docx">Professional Self Assessment (DOCX)</a></li>
+        <li><a href="docs/CS499_Module3_SWE_Journal.docx">Software Engineering Narrative (DOCX)</a></li>
+        <li><a href="docs/CS499_Module4_Algorithms_Journal.docx">Algorithms Narrative (DOCX)</a></li>
+        <li><a href="docs/CS499_Module5_Databases_Journal.docx">Databases Narrative (DOCX)</a></li>
+      </ul>
+
+      <h3>Code Repositories</h3>
+      <ul>
+        <li>
+          <a href="https://github.com/AndreEspinoza/travlr-backend"
+             target="_blank"
+             rel="noopener noreferrer">
+            Travlr Getaways Backend (Node, Express, MongoDB)
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/AndreEspinoza/travlr-angular"
+             target="_blank"
+             rel="noopener noreferrer">
+            Travlr Getaways Angular Admin
+          </a>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 • Andre Espinoza • CS 499 Computer Science Capstone
+  </footer>
+</body>
+</html>
+
